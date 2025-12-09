@@ -1,0 +1,366 @@
+/* Variáveis Principais */
+:root {
+    --gm-green: #5ed12b;
+    --gm-dark: #0b0e1f;
+    --gm-gray: #f4f4f4;
+}
+body {
+    background-color: #f4f4f4;
+}
+
+body {
+    background-color: var(--gm-gray);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Utilitários */
+.bg-dark-blue { background-color: var(--gm-dark) !important; }
+.text-green { color: var(--gm-green) !important; }
+.hover-green:hover { color: #39ff14!important; text-decoration: underline !important; }
+
+/* Logo */
+.logo-text {
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin: 0;
+    color: white;
+}
+
+/* Navbar */
+.navbar-nav .nav-link {
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem !important;
+    text-transform: uppercase;
+}
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link.active { color: var(--gm-green) !important; }
+
+/* --- Títulos Centrais com Linha --- */
+.title-underline-center {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+.title-underline-center::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--gm-green);
+    margin: 8px auto 0; /* Centraliza a linha */
+}
+.spacing-wide { letter-spacing: 2px; }
+
+/* --- Carrossel de Marcas e Depoimentos --- */
+/* Customização das setas de navegação para serem escuras e laterais */
+.custom-control-dark {
+    width: 5%;
+    background: transparent;
+    opacity: 1; /* Sempre visível */
+}
+.custom-control-dark:hover {
+    background: rgba(0,0,0,0.1);
+}
+
+.brand-logo {
+    max-height: 50px;
+    filter: grayscale(100%);
+    opacity: 0.6;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.brand-logo:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Cards de Categoria */
+.hover-scale {
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+.hover-scale:hover {
+    transform: translateY(-5px);
+}
+.hover-scale img {
+    transition: transform 0.3s ease;
+}
+.hover-scale:hover img {
+    transform: scale(1.05);
+}
+
+/* Produtos */
+.product-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+.btn-comprar {
+    background-color: var(--gm-dark);
+    border: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 8px 0;
+}
+.btn-comprar:hover {
+    background-color:  #39ff14;
+    color: black;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .logo-text { font-size: 1.5rem; }
+    /* Ajustes para mobile */
+    .brand-logo { max-height: 30px; margin: 0 10px; }
+}
+
+:root {
+    --neon-green: #39ff14;
+    --dark-blue: #03051a;
+    --search-bg: #f0f8ff;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* --- Top Bar --- */
+.top-bar {
+    background-color: var(--neon-green);
+    color: #000;
+    height: 40px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* --- Navbar Principal --- */
+.bg-custom-dark {
+    background-color: var(--dark-blue);
+}
+
+/* CONFIGURAÇÃO DA LOGO IMAGEM */
+/* CONFIGURAÇÃO DA LOGO IMAGEM (Tamanho Aumentado) */
+.logo-img {
+    max-height: 90px; /* Aumentado para 90px (era 60px) */
+    width: auto;      /* Mantém a proporção correta */
+    display: block;
+    transition: all 0.3s ease; /* Efeito suave se redimensionar a tela */
+}
+
+/* --- Ajustes Mobile --- */
+@media (max-width: 991px) {
+    .nav-link:hover {
+        color: var(--neon-green) !important;
+    }
+    
+    /* Tamanho da logo no celular */
+    .logo-img {
+        max-height: 60px; /* Aumentado para 60px (era 45px) */
+    }
+    
+    .header-icons {
+        justify-content: center !important;
+        margin-top: 10px;
+    }
+}
+
+/* --- Busca --- */
+.search-container {
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.search-input {
+    border-radius: 5px;
+    border: none;
+    background-color: var(--search-bg);
+    padding: 10px 40px 10px 15px;
+}
+
+.search-btn {
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    border: none;
+    background: transparent;
+    color: var(--dark-blue);
+    font-size: 1.2rem;
+}
+
+/* --- Ícones --- */
+.header-icons a {
+    color: #fff;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header-icons a:hover {
+    color: var(--neon-green);
+}
+
+/* --- Barra de Categorias (Desktop) --- */
+.category-bar {
+    padding: 10px 0;
+    box-shadow: 0 4px 6px -6px #000;
+}
+
+.cat-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 0 25px;
+    text-transform: uppercase;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.cat-link:hover {
+    color: var(--neon-green);
+}
+
+.cat-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--neon-green);
+    transition: width 0.3s ease;
+}
+
+.cat-link:hover::after {
+    width: 100%;
+}
+
+/* --- Ajustes Mobile --- */
+@media (max-width: 991px) {
+    .nav-link:hover {
+        color: var(--neon-green) !important;
+    }
+    
+    /* Reduz um pouco a logo no celular se necessário */
+    .logo-img {
+        max-height: 45px;
+    }
+    
+    .header-icons {
+        justify-content: center !important;
+        margin-top: 10px;
+    }
+}
+
+/* --- Barra de Benefícios (Compacta) --- */
+
+:root {
+    --neon-green: #39ff14; 
+}
+
+.benefits-bar {
+    background: linear-gradient(90deg, #020412 0%, #0a1142 50%, #020412 100%);
+    border-bottom: 1px solid #1a1a40;
+    position: relative;
+    width: 100%;
+    /* Garante que a barra não fique menor que isso, mas permite crescer se necessário */
+    min-height: 60px; 
+}
+
+/* Ícone menor e mais ajustado */
+.icon-neon {
+    font-size: 1.6rem; /* Reduzido de 2.2rem para 1.6rem */
+    color: var(--neon-green);
+    filter: drop-shadow(0 0 3px rgba(38, 255, 0, 0.5));
+    transition: transform 0.3s ease;
+}
+
+.benefit-item:hover .icon-neon {
+    transform: scale(1.1);
+}
+
+/* Texto do Título (10% OFF, etc) */
+.benefit-title {
+    font-size: 1rem; /* Tamanho padrão de leitura (16px) */
+    line-height: 1;  /* Linha mais apertada */
+    margin-bottom: 2px;
+}
+
+/* Texto pequeno (subtítulo) */
+.text-muted-light {
+    color: #b0b3c6;
+    font-size: 0.75rem; /* Texto bem pequeno e discreto */
+    display: block;     /* Garante que fique na linha de baixo */
+    line-height: 1;
+}
+
+/* --- Bordas e Responsividade --- */
+
+@media (min-width: 768px) {
+    .border-desktop {
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        height: 35px; /* Altura fixa da borda para não esticar demais */
+    }
+}
+
+@media (max-width: 767px) {
+    .benefit-item {
+        justify-content: flex-start !important;
+        padding: 8px 0; /* Padding menor no mobile */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .col-12:last-child .benefit-item {
+        border-bottom: none;
+    }
+}
+
+/* Estilização específica do Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0e27;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #39ff14;
+            border-radius: 5px;
+        }
+
+        .text-neon-green {
+            color: var(--gm-green);
+        }
+        .bg-neon-green {
+            background-color: var(--gm-green);
+        }
+        
+        .main-container {
+            background-color: white;
+            min-height: 100vh;
+        }
+
+        /* --- FOOTER --- */
+.bg-blue-dark {
+    background-color: #050a30;
+}
+.border-top-neon {
+    border-top: 4px solid var(--gm-green);
+}
+.hover-white:hover {
+    color: white !important;
+}
+.bg-neon {
+    background-color: #39ff14;
+}
+.text-dark-blue {
+    color:  #050a30;
+}
+.hover-scale {
+    transition: transform 0.2s;
+}
+.hover-scale:hover {
+    transform: scale(1.2);
+}

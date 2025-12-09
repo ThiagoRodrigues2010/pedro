@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Super 3D Platformer - Adventure Mode</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; font-family: 'Courier New', Courier, monospace; }
+        
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            image-rendering: pixelated; 
+        }
+
+        #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; pointer-events: none; }
+        
+        #ui-layer { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            pointer-events: none; display: flex; flex-direction: column; 
+            justify-content: space-between; padding: 20px; box-sizing: border-box; 
+        }
+        
+        .hud-text { color: #FFD700; text-shadow: 2px 2px 0 #000; font-size: 24px; font-weight: bold; }
+        .powerup-text { color: #00FFFF; text-shadow: 2px 2px 0 #000; font-size: 20px; font-weight: bold; display: none; }
+        .level-text { color: #FFFFFF; text-shadow: 2px 2px 0 #000; font-size: 20px; font-weight: bold; }
+        
+        #message-box { 
+            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            background: rgba(0, 0, 0, 0.85); border: 4px solid #FFF; padding: 20px; 
+            color: white; text-align: center; border-radius: 10px; pointer-events: auto;
+        }
+        
+        button { background: #FF4500; border: 2px solid #FFF; color: white; padding: 10px 20px; font-size: 18px; cursor: pointer; margin-top: 10px; font-family: inherit; }
+        button:hover { background: #FF6347; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+<div id="loading">Carregando Aventura...</div>
+
+<div id="ui-layer">
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+        <div class="hud-text">MOEDAS: <span id="score">0</span> | VIDAS: <span id="lives">5</span></div>
+        <div class="level-text">FASE: <span id="level-display">1</span></div>
+    </div>
+    
+    <div id="center-msgs" style="position: absolute; top: 20%; width: 100%; text-align: center;">
+        <div id="powerup-msg" class="powerup-text">SUPER PULO ATIVO!</div>
+        <div id="checkpoint-msg" class="powerup-text" style="color: #00FF00; display: none;">CHECKPOINT SALVO!</div>
+        <div id="level-msg" class="powerup-text" style="color: #FFD700; display: none; font-size: 30px;">PRÓXIMA FASE!</div>
+    </div>
+
+    <div class="controls-hint" style="margin-top: auto;">
+        ARROWS / WASD para Mover • ESPAÇO para Pular
+    </div>
+</div>
+
+<div id="message-box">
+    <h2 id="msg-title">FIM DE JOGO</h2>
+    <p id="msg-text">Tente novamente!</p>
+    <button onclick="resetGame()">Reiniciar</button>
+</div>
+
+<script>
+    // --- CONFIGURAÇÃO ---
+    let scene, camera, renderer;
+    let clock = new THREE.Clock();
+    let player, levelGroup, enemyGroup, bgGroup;
+    let cameraTargetX = 0;
+    
+    const PIXEL_SCALE = 4;
+
+    const gameState = {
+        score: 0,
+        lives: 5, 
+        currentLevel: 0,
+        isPlaying: false,
+        won: false,
+        checkpoint: null, 
+        powerupActive: false,
+        powerupTimer: 0
+    };
+
+    const PHYSICS = {
+        gravity: 50,         
+        moveSpeed: 12,
+        jumpForce: 28,       
+        superJumpForce: 38,  
+        maxFallSpeed: -25,   
+        playerWidth: 0.7,
+        playerHeight: 1.6
+    };
+
+    const playerState = {
+        velocity: new THREE.Vector3(),
+        onGround: false,
+        input: { x: 0, jump: false },
+        isDead: false,
+        facingRight: true,
+        animTime: 0
+    };
+
+    const BLOCK_SIZE = 2; 
+
+    // --- MAPAS DAS FASES ---
+    // Legenda:
+    // . = Vazio
+    // # = Tijolo (Chão)
+    // ? = Bloco Surpresa
+    // M = Moeda
+    // E = Inimigo (Cogumelo)
+    // G = Gosma (Slime)
+    // T = Tartaruga
+    // K = Checkpoint (Bandeira)
+    // P = Powerup
+    // | = Cano (Fim da fase)
+    // S = Start
+    
+    const LEVELS = [
+        // FASE 1: Introdução
+        [
+            ".......................................................................................................",
+            ".......................................................................................................",
+            ".......................................................................................................",
+            "...........................................................................................|...........",
+            ".....................................P....................MMM..............................|...........",
+            "...................................####..................#####.............................|...........",
+            ".......................???.................................................................|...........",
+            "............................................K..............................................|...........",
+            "..................G..........E.......G....#####..T........................E................|...........",
+            "S......E.........###........###.....###..........###.......#...#.....#...#....###..........|...........",
+            "#####.####...###.....##..##.....###.....##########...###...#...#.....#...#........#####################",
+            "#####.####...###.....##..##.....###.....##########...###...#...#.....#...#........#####################"
+        ],
+        // FASE 2: O Abismo e as Plataformas
+        [
+            "................................................................................................................",
+            "................................................................................................................",
+            "................................................................................................................",
+            "......................................................................................................|.........",
+            "........................................................MMM...........................................|.........",
+            "........................................???............#####..........T...............................|.........",
+            "...........................MMM.........#####........................#####.............................|.........",
+            "..........................#####...................K...................................................|.........",
+            ".............P..................................#####..........E.............G........E...............|.........",
+            "S...........###...............................................###...........###......###..............|.........",
+            "#####...#.........#...#.........#...#.......###.......###...........#...#........##......#######################",
+            "#####...#.........#...#.........#...#.......###.......###...........#...#........##......#######################"
+        ],
+        // FASE 3: A Fortaleza Final
+        [
+            "........................................................................................................................",
+            "........................................................................................................................",
+            "........................................................................................................................",
+            "..............................................................................................................|.........",
+            "....................................................................................MMM.......................|.........",
+            "....................................T.......T.......T.....................T........#####......................|.........",
+            "......................P...........#####...#####...#####.................#####.................................|.........",
+            "....................#####...................................K.................................................|.........",
+            "..........G...............................................#####...............................E.......E.......|.........",
+            "S........###.................................................................................###.....###......|.........",
+            "#####..........###.........###.....................................###.........###.....###................##############",
+            "#####..........###.........###.........###.........###.............###.........###.....###................##############"
+        ]
+    ];
+
+    // --- TEXTURAS ---
+    function createTexture(type) {
+        const size = 64;
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        // Cores base
+        if (type.includes('face_hero')) ctx.fillStyle = '#ffccaa'; 
+        else if (type === 'face_enemy') ctx.fillStyle = '#8B0000';
+        else if (type === 'face_slime') ctx.fillStyle = '#32CD32';
+        else if (type === 'face_turtle') ctx.fillStyle = '#2E8B57';
+        else if (type === 'brick') ctx.fillStyle = '#8B4513';
+        else if (type === 'ground') ctx.fillStyle = '#228B22'; 
+        else if (type === 'question') ctx.fillStyle = '#FFD700';
+        else if (type === 'pipe') ctx.fillStyle = '#00AA00'; // Verde Cano
+        else if (type === 'checkpoint') ctx.fillStyle = '#FFFFFF';
+        else ctx.fillStyle = '#FFFFFF';
+        
+        ctx.fillRect(0, 0, size, size);
+
+        // Ruído
+        if (!type.includes('flag') && !type.includes('pipe')) {
+             for (let i = 0; i < 200; i++) {
+                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+                ctx.fillRect(Math.floor(Math.random()*size), Math.floor(Math.random()*size), 2, 2);
+            }
+        }
+
+        // --- DESENHO DOS ROSTOS & DETALHES ---
+        if (type === 'face_hero') {
+            ctx.fillStyle = '#000';
+            ctx.beginPath(); ctx.arc(20, 26, 6, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(44, 26, 6, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#FFF';
+            ctx.beginPath(); ctx.arc(22, 24, 2, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(46, 24, 2, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#4a3c31';
+            ctx.beginPath();
+            ctx.moveTo(14, 40); ctx.quadraticCurveTo(32, 50, 50, 40); ctx.quadraticCurveTo(32, 45, 14, 40);
+            ctx.fill();
+        }
+
+        if (type === 'face_enemy') { 
+            ctx.fillStyle = '#000';
+            ctx.beginPath(); ctx.moveTo(10, 20); ctx.lineTo(30, 30); ctx.lineTo(10, 30); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(54, 20); ctx.lineTo(34, 30); ctx.lineTo(54, 30); ctx.fill();
+            ctx.fillRect(14, 30, 8, 8); ctx.fillRect(42, 30, 8, 8);
+            ctx.fillStyle = '#FFF'; ctx.fillRect(20, 48, 6, 6); ctx.fillRect(38, 48, 6, 6);
+        }
+
+        if (type === 'face_slime') {
+            ctx.fillStyle = '#FFF'; ctx.fillRect(10, 20, 16, 16); ctx.fillRect(38, 25, 12, 12);
+            ctx.fillStyle = '#000'; ctx.fillRect(18, 24, 4, 4); ctx.fillRect(42, 29, 4, 4);
+            ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(20, 45, 24, 4);
+        }
+
+        if (type === 'face_turtle') {
+            ctx.fillStyle = '#000'; ctx.fillRect(10, 25, 15, 5); ctx.fillRect(39, 25, 15, 5);
+            ctx.fillStyle = '#FFFF00'; ctx.fillRect(12, 30, 10, 5); ctx.fillRect(41, 30, 10, 5);
+            ctx.fillStyle = '#F4A460'; ctx.fillRect(28, 40, 8, 8);
+        }
+
+        if (type === 'checkpoint') { 
+            ctx.fillStyle = '#FF0000';
+            ctx.fillRect(0,0,32,32); ctx.fillRect(32,32,32,32);
+        }
+
+        if (type === 'brick') {
+            ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = 4; ctx.strokeRect(0,0,size,size);
+            ctx.beginPath(); ctx.moveTo(0, size/2); ctx.lineTo(size, size/2); ctx.stroke();
+        }
+
+        if (type === 'question') {
+            ctx.fillStyle = '#B8860B'; ctx.fillRect(4, 4, size-8, size-8);
+            ctx.fillStyle = '#000'; ctx.font = 'bold 40px monospace'; ctx.fillText('?', 20, 45);
+        }
+
+        if (type === 'pipe') {
+            // Efeito de brilho no cano
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.fillRect(10, 0, 10, size);
+        }
+
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        return texture;
+    }
+
+    const textures = {
+        face_hero: createTexture('face_hero'),
+        face_enemy: createTexture('face_enemy'),
+        face_slime: createTexture('face_slime'),
+        face_turtle: createTexture('face_turtle'),
+        ground: createTexture('ground'),
+        brick: createTexture('brick'),
+        question: createTexture('question'),
+        checkpoint: createTexture('checkpoint'),
+        pipe: createTexture('pipe')
+    };
+
+    // --- INICIALIZAÇÃO ---
+    function init() {
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x6495ED); 
+        scene.fog = new THREE.Fog(0x6495ED, 20, 60);
+
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 6, 18);
+
+        renderer = new THREE.WebGLRenderer({ antialias: false });
+        renderer.setSize(window.innerWidth / PIXEL_SCALE, window.innerHeight / PIXEL_SCALE, false);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.BasicShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(20, 30, 10);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 1024; dirLight.shadow.mapSize.height = 1024;
+        dirLight.shadow.camera.left = -60; dirLight.shadow.camera.right = 60;
+        dirLight.shadow.camera.top = 50; dirLight.shadow.camera.bottom = -50;
+        scene.add(dirLight);
+
+        bgGroup = new THREE.Group(); scene.add(bgGroup);
+        levelGroup = new THREE.Group(); scene.add(levelGroup);
+        enemyGroup = new THREE.Group(); scene.add(enemyGroup);
+
+        createBetterBackground();
+        generateLevel(0); // Inicia Fase 1 (Index 0)
+
+        window.addEventListener('resize', onWindowResize, false);
+        window.addEventListener('keydown', (e) => handleKey(e, true));
+        window.addEventListener('keyup', (e) => handleKey(e, false));
+
+        document.getElementById('loading').style.display = 'none';
+        gameState.isPlaying = true;
+        animate();
+    }
+
+    // --- OBJETOS DO JOGO ---
+
+    function createBetterBackground() {
+        const cloudGeo = new THREE.BoxGeometry(4, 2, 2);
+        const cloudMat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.8 });
+        
+        for (let i = 0; i < 20; i++) {
+            const cloud = new THREE.Group();
+            const chunks = 3 + Math.random() * 3;
+            for(let j=0; j<chunks; j++) {
+                const mesh = new THREE.Mesh(cloudGeo, cloudMat);
+                mesh.position.set(j*2 - (chunks), Math.random(), Math.random());
+                mesh.scale.set(1 + Math.random(), 1 + Math.random(), 1);
+                cloud.add(mesh);
+            }
+            cloud.position.set((Math.random() * 200) - 20, 15 + Math.random() * 10, -20 - Math.random() * 20);
+            bgGroup.add(cloud);
+            cloud.userData = { speed: 0.5 + Math.random() * 1 };
+        }
+
+        const mountGeo = new THREE.ConeGeometry(15, 30, 4); 
+        const mountMat = new THREE.MeshBasicMaterial({ color: 0x2E8B57 }); 
+        const mountSnowMat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF }); 
+        
+        for (let i = -50; i < 350; i+=30) {
+            const mGroup = new THREE.Group();
+            const mountain = new THREE.Mesh(mountGeo, mountMat);
+            mountain.position.y = 5;
+            mGroup.add(mountain);
+            const snow = new THREE.Mesh(new THREE.ConeGeometry(5, 8, 4), mountSnowMat);
+            snow.position.y = 16;
+            mGroup.add(snow);
+            mGroup.position.set(i + (Math.random() * 10), -5, -25 - (Math.random() * 10));
+            mGroup.scale.set(1 + Math.random(), 0.8 + Math.random(), 1);
+            bgGroup.add(mGroup);
+        }
+    }
+
+    function createPlayerMesh() {
+        const group = new THREE.Group();
+        const matRed = new THREE.MeshStandardMaterial({ color: 0xe60000, roughness: 0.3 });
+        const matBlue = new THREE.MeshStandardMaterial({ color: 0x0000cc, roughness: 0.3 });
+        const matSkin = new THREE.MeshStandardMaterial({ color: 0xffccaa }); 
+        const matFace = new THREE.MeshStandardMaterial({ map: textures.face_hero, transparent: true });
+
+        const bodyGeo = new THREE.SphereGeometry(0.5, 12, 12);
+        bodyGeo.scale(1, 1.2, 1);
+        const body = new THREE.Mesh(bodyGeo, matBlue);
+        body.position.y = 0.6;
+        body.castShadow = true;
+        group.add(body);
+
+        const headMaterials = [matSkin, matSkin, matSkin, matSkin, matFace, matSkin];
+        const headGeo = new THREE.BoxGeometry(0.7, 0.7, 0.7);
+        const head = new THREE.Mesh(headGeo, headMaterials);
+        head.position.y = 1.35;
+        head.castShadow = true;
+        group.add(head);
+
+        const hatGeo = new THREE.SphereGeometry(0.5, 12, 12, 0, Math.PI*2, 0, Math.PI/2);
+        const hat = new THREE.Mesh(hatGeo, matRed);
+        hat.position.set(0, 1.6, 0);
+        hat.scale.set(1, 0.8, 1);
+        group.add(hat);
+        const hatBrimGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.1, 12, 1, false, 0, Math.PI);
+        const hatBrim = new THREE.Mesh(hatBrimGeo, matRed);
+        hatBrim.rotation.x = 0.2;
+        hatBrim.position.set(0, 1.6, 0.25);
+        group.add(hatBrim);
+
+        const limbGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.5, 8);
+        const handFootGeo = new THREE.SphereGeometry(0.2, 8, 8);
+
+        const createLimb = (x, y, matLimb, matExtremity) => {
+            const limbGroup = new THREE.Group();
+            const arm = new THREE.Mesh(limbGeo, matLimb);
+            arm.position.y = -0.25;
+            limbGroup.add(arm);
+            const hand = new THREE.Mesh(handFootGeo, matExtremity);
+            hand.position.y = -0.5;
+            limbGroup.add(hand);
+            limbGroup.position.set(x, y, 0);
+            return limbGroup;
+        };
+
+        group.armL = createLimb(-0.45, 1.0, matRed, matSkin); group.add(group.armL);
+        group.armR = createLimb(0.45, 1.0, matRed, matSkin); group.add(group.armR);
+        group.legL = createLimb(-0.2, 0.5, matBlue, matRed); group.add(group.legL);
+        group.legR = createLimb(0.2, 0.5, matBlue, matRed); group.add(group.legR);
+
+        return group;
+    }
+
+    function createPipe(x, y) {
+        const group = new THREE.Group();
+        const mat = new THREE.MeshStandardMaterial({ map: textures.pipe, color: 0x00CC00 });
+
+        // Corpo do cano
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 2, 16), mat);
+        body.position.y = 1;
+        group.add(body);
+
+        // Borda do cano
+        const rim = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.0, 0.5, 16), mat);
+        rim.position.y = 2;
+        group.add(rim);
+
+        // Interior Preto (buraco)
+        const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.1, 16), new THREE.MeshBasicMaterial({color: 0x000000}));
+        hole.position.y = 2.26;
+        group.add(hole);
+
+        group.position.set(x * BLOCK_SIZE, y * BLOCK_SIZE, 0);
+        group.userData = { isPipe: true, active: true };
+        levelGroup.add(group);
+    }
+
+    function createCheckpoint(x, y, id) {
+        const group = new THREE.Group();
+        const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 3), new THREE.MeshStandardMaterial({color: 0xFFFFFF}));
+        pole.position.y = 1.5;
+        group.add(pole);
+        const flagGeo = new THREE.PlaneGeometry(1.5, 1);
+        const flagMat = new THREE.MeshStandardMaterial({ map: textures.checkpoint, side: THREE.DoubleSide });
+        const flag = new THREE.Mesh(flagGeo, flagMat);
+        flag.position.set(0.75, 2.5, 0);
+        group.add(flag);
+
+        group.position.set(x * BLOCK_SIZE, y * BLOCK_SIZE, 0);
+        group.userData = { isCheckpoint: true, active: false, id: id };
+        levelGroup.add(group);
+    }
+
+    function createPowerup(x, y) {
+        const group = new THREE.Group();
+        const headGeo = new THREE.SphereGeometry(0.6, 12, 12, 0, Math.PI*2, 0, Math.PI/2);
+        const headMat = new THREE.MeshStandardMaterial({ color: 0x00FFFF, emissive: 0x004444 });
+        const head = new THREE.Mesh(headGeo, headMat);
+        
+        const stemGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.5);
+        const stemMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF });
+        const stem = new THREE.Mesh(stemGeo, stemMat);
+        stem.position.y = -0.25;
+
+        group.add(head);
+        group.add(stem);
+        group.position.set(x * BLOCK_SIZE, y * BLOCK_SIZE + 0.5, 0);
+        group.userData = { isPowerup: true, startY: group.position.y, active: true };
+        levelGroup.add(group);
+    }
+
+    function createEnemyMesh(type) {
+        const group = new THREE.Group();
+        
+        if (type === 'mushroom') {
+            const headGeo = new THREE.SphereGeometry(0.7, 12, 12, 0, Math.PI*2, 0, Math.PI/2); 
+            const headMat = new THREE.MeshStandardMaterial({ map: textures.face_enemy }); 
+            const head = new THREE.Mesh(headGeo, headMat);
+            head.rotation.y = -Math.PI/2; 
+            head.position.y = 0.25;
+            group.add(head);
+            const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.45, 0.5, 8), new THREE.MeshStandardMaterial({ color: 0xF5DEB3 }));
+            stem.position.y = -0.25;
+            group.add(stem);
+            const footGeo = new THREE.SphereGeometry(0.2, 8, 8);
+            const footMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
+            group.footL = new THREE.Mesh(footGeo, footMat); group.footL.position.set(-0.3, -0.5, 0.1); group.add(group.footL);
+            group.footR = new THREE.Mesh(footGeo, footMat); group.footR.position.set(0.3, -0.5, 0.1); group.add(group.footR);
+        }
+        else if (type === 'slime') {
+            const sGeo = new THREE.BoxGeometry(1, 0.8, 1);
+            const matFace = new THREE.MeshStandardMaterial({ map: textures.face_slime, transparent: true }); 
+            const matBody = new THREE.MeshStandardMaterial({ color: 0x32CD32, transparent: true, opacity: 0.8 });
+            const sMats = [matBody, matBody, matBody, matBody, matFace, matBody];
+            const body = new THREE.Mesh(sGeo, sMats);
+            body.position.y = 0;
+            group.add(body);
+        }
+        else if (type === 'turtle') {
+            const shell = new THREE.Mesh(new THREE.SphereGeometry(0.7, 12, 8, 0, Math.PI * 2, 0, Math.PI/2), new THREE.MeshStandardMaterial({ color: 0x006400 }));
+            shell.position.y = -0.2;
+            group.add(shell);
+            const spikeGeo = new THREE.ConeGeometry(0.1, 0.4, 4);
+            const spikeMat = new THREE.MeshStandardMaterial({ color: 0xDDDDDD });
+            const s1 = new THREE.Mesh(spikeGeo, spikeMat); s1.position.set(0, 0.5, 0); shell.add(s1);
+
+            const head = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.4, 0.5), [new THREE.MeshStandardMaterial({color:0x2E8B57}),new THREE.MeshStandardMaterial({color:0x2E8B57}),new THREE.MeshStandardMaterial({color:0x2E8B57}),new THREE.MeshStandardMaterial({color:0x2E8B57}),new THREE.MeshStandardMaterial({map:textures.face_turtle}),new THREE.MeshStandardMaterial({color:0x2E8B57})]);
+            head.position.set(0, 0, 0.5);
+            group.add(head);
+            const fGeo = new THREE.SphereGeometry(0.15);
+            group.footL = new THREE.Mesh(fGeo, new THREE.MeshStandardMaterial({color:0x2E8B57})); group.footL.position.set(-0.4, -0.2, 0); group.add(group.footL);
+            group.footR = new THREE.Mesh(fGeo, new THREE.MeshStandardMaterial({color:0x2E8B57})); group.footR.position.set(0.4, -0.2, 0); group.add(group.footR);
+        }
+        return group;
+    }
+
+    function createBlock(x, y, type) {
+        const geo = new THREE.BoxGeometry(BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        let mat;
+        if (type === 'brick') mat = new THREE.MeshStandardMaterial({ map: textures.brick });
+        else if (type === 'question') mat = new THREE.MeshStandardMaterial({ map: textures.question });
+        else mat = new THREE.MeshStandardMaterial({ map: textures.ground });
+
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x * BLOCK_SIZE, y * BLOCK_SIZE, 0);
+        mesh.castShadow = true; mesh.receiveShadow = true;
+        mesh.userData = { isBlock: true, type: type, originalY: y * BLOCK_SIZE };
+        levelGroup.add(mesh);
+        return mesh;
+    }
+
+    function createCoin(x, y) {
+        const geo = new THREE.CylinderGeometry(0.4, 0.4, 0.1, 8); geo.rotateX(Math.PI / 2); 
+        const mat = new THREE.MeshStandardMaterial({ color: 0xFFD700 });
+        const coin = new THREE.Mesh(geo, mat);
+        coin.position.set(x * BLOCK_SIZE, y * BLOCK_SIZE, 0);
+        coin.userData = { isCoin: true, active: true };
+        levelGroup.add(coin);
+    }
+
+    function generateLevel(levelIndex) {
+        // Limpeza
+        while(levelGroup.children.length > 0) levelGroup.remove(levelGroup.children[0]); 
+        while(enemyGroup.children.length > 0) enemyGroup.remove(enemyGroup.children[0]); 
+
+        gameState.currentLevel = levelIndex;
+        // Reseta checkpoint ao mudar de nível
+        gameState.checkpoint = null; 
+        
+        document.getElementById('level-display').innerText = levelIndex + 1;
+
+        const mapData = LEVELS[levelIndex];
+        const rows = mapData.length;
+        let ckptCounter = 0;
+        
+        for (let r = 0; r < rows; r++) {
+            const rowString = mapData[r];
+            const yIndex = rows - 1 - r; 
+
+            for (let c = 0; c < rowString.length; c++) {
+                const char = rowString[c];
+                const x = c;
+                const y = yIndex;
+
+                if (char === '#') createBlock(x, y, 'brick');
+                else if (char === '?') createBlock(x, y, 'question');
+                else if (char === 'M') createCoin(x, y);
+                else if (char === 'K') createCheckpoint(x, y, ++ckptCounter); 
+                else if (char === 'P') createPowerup(x, y);
+                else if (char === '|') createPipe(x, y); // Cano de saída
+                else if (char.match(/Start|S/)) {
+                    if (!player) { player = createPlayerMesh(); scene.add(player); }
+                    player.position.set(x * BLOCK_SIZE, (y + 2) * BLOCK_SIZE, 0);
+                    playerState.velocity.set(0, 0, 0);
+                }
+                else if (['E', 'G', 'T'].includes(char)) {
+                    let type = 'mushroom';
+                    if (char === 'G') type = 'slime';
+                    if (char === 'T') type = 'turtle';
+                    
+                    const enemy = createEnemyMesh(type);
+                    const spawnY = (y * BLOCK_SIZE); 
+                    enemy.position.set(x * BLOCK_SIZE, spawnY - 0.5, 0); 
+                    
+                    enemy.userData = { 
+                        isEnemy: true, 
+                        type: type,
+                        velocity: new THREE.Vector3(type === 'slime' ? -1.0 : -1.8, 0, 0),
+                        patrolStart: x * BLOCK_SIZE - 2,
+                        patrolEnd: x * BLOCK_SIZE + 2,
+                        isSpiky: (type === 'turtle')
+                    };
+                    enemyGroup.add(enemy);
+                }
+            }
+        }
+    }
+
+    // --- FÍSICA E LÓGICA ---
+
+    function handleKey(e, isDown) {
+        const k = e.key.toLowerCase();
+        if (k === 'arrowleft' || k === 'a') playerState.input.x = isDown ? -1 : (playerState.input.x === -1 ? 0 : playerState.input.x);
+        if (k === 'arrowright' || k === 'd') playerState.input.x = isDown ? 1 : (playerState.input.x === 1 ? 0 : playerState.input.x);
+        if (k === ' ' || k === 'arrowup' || k === 'w') {
+            if (isDown && !playerState.input.jump) {
+                 if (playerState.onGround) {
+                     const force = gameState.powerupActive ? PHYSICS.superJumpForce : PHYSICS.jumpForce;
+                     playerState.velocity.y = force;
+                     playerState.onGround = false;
+                 }
+            }
+            playerState.input.jump = isDown;
+        }
+    }
+
+    function checkCollision(pos, width, height, liftY = 0) {
+        const collisions = [];
+        const minX = pos.x - width / 2; const maxX = pos.x + width / 2;
+        const minY = pos.y + liftY; const maxY = pos.y + height;
+
+        levelGroup.children.forEach(mesh => {
+            const d = mesh.userData;
+            if (!d.isBlock && !d.isCoin && !d.isCheckpoint && !d.isPowerup && !d.isPipe) return;
+            if (d.active === false) return;
+            if (Math.abs(mesh.position.x - pos.x) > 3 || Math.abs(mesh.position.y - pos.y) > 3) return;
+
+            let hSize = BLOCK_SIZE / 2;
+            if (d.isPowerup) hSize = 0.8;
+            if (d.isCheckpoint) hSize = 1.5; 
+            if (d.isPipe) hSize = 0.5; // Cano estreito
+
+            const bMinX = mesh.position.x - hSize; const bMaxX = mesh.position.x + hSize;
+            const bMinY = mesh.position.y - hSize; const bMaxY = mesh.position.y + hSize;
+
+            if (minX < bMaxX && maxX > bMinX && minY < bMaxY && maxY > bMinY) collisions.push(mesh);
+        });
+        return collisions;
+    }
+
+    function updatePlayer(dt) {
+        if (playerState.isDead || gameState.won) return;
+
+        if (gameState.powerupActive) {
+            gameState.powerupTimer -= dt;
+            if (gameState.powerupTimer <= 0) {
+                gameState.powerupActive = false;
+                document.getElementById('powerup-msg').style.display = 'none';
+            }
+        }
+
+        const targetSpeed = playerState.input.x * PHYSICS.moveSpeed;
+        const accel = playerState.onGround ? 15 : 8; 
+        playerState.velocity.x += (targetSpeed - playerState.velocity.x) * accel * dt;
+
+        const nextX = player.position.x + playerState.velocity.x * dt;
+        const hitsX = checkCollision(new THREE.Vector3(nextX, player.position.y, 0), PHYSICS.playerWidth, PHYSICS.playerHeight, 0.2);
+
+        let collidedX = false;
+        hitsX.forEach(obj => {
+            if (obj.userData.isCoin) collectCoin(obj);
+            else if (obj.userData.isPipe) nextLevel();
+            else if (obj.userData.isCheckpoint) activateCheckpoint(obj);
+            else if (obj.userData.isPowerup) activatePowerup(obj);
+            else collidedX = true;
+        });
+
+        if (!collidedX) player.position.x = nextX;
+        else playerState.velocity.x = 0;
+
+        playerState.velocity.y -= PHYSICS.gravity * dt;
+        if (playerState.velocity.y < PHYSICS.maxFallSpeed) playerState.velocity.y = PHYSICS.maxFallSpeed;
+
+        const nextY = player.position.y + playerState.velocity.y * dt;
+        const hitsY = checkCollision(new THREE.Vector3(player.position.x, nextY, 0), PHYSICS.playerWidth, PHYSICS.playerHeight, 0);
+
+        let collidedY = false;
+        playerState.onGround = false; 
+
+        hitsY.forEach(obj => {
+            if (obj.userData.isCoin) { collectCoin(obj); return; }
+            if (obj.userData.isPipe) { nextLevel(); return; }
+            if (obj.userData.isCheckpoint) { activateCheckpoint(obj); return; }
+            if (obj.userData.isPowerup) { activatePowerup(obj); return; }
+
+            const objTop = obj.position.y + BLOCK_SIZE / 2;
+            const objBottom = obj.position.y - BLOCK_SIZE / 2;
+
+            if (playerState.velocity.y <= 0 && player.position.y >= objTop - 0.5) {
+                player.position.y = objTop; 
+                playerState.velocity.y = 0;
+                playerState.onGround = true;
+                collidedY = true;
+            }
+            else if (playerState.velocity.y > 0 && player.position.y + PHYSICS.playerHeight <= objBottom + 0.5) {
+                player.position.y = objBottom - PHYSICS.playerHeight;
+                playerState.velocity.y = 0;
+                collidedY = true;
+                if (obj.userData.type === 'question') hitBlock(obj);
+            }
+        });
+
+        if (!collidedY) player.position.y = nextY;
+        if (player.position.y < -10) die();
+
+        animatePlayerMesh(dt);
+        if (Math.abs(playerState.velocity.x) > 0.1) {
+            const targetRot = playerState.velocity.x > 0 ? Math.PI / 2 : -Math.PI / 2;
+            player.rotation.y += (targetRot - player.rotation.y) * 10 * dt;
+        }
+
+        checkEnemyCollisions();
+    }
+
+    function animatePlayerMesh(dt) {
+        if (Math.abs(playerState.velocity.x) > 0.5 && playerState.onGround) {
+            playerState.animTime += dt * 15;
+            player.legL.rotation.x = Math.sin(playerState.animTime) * 1.0;
+            player.legR.rotation.x = Math.sin(playerState.animTime + Math.PI) * 1.0;
+            player.armL.rotation.x = Math.sin(playerState.animTime + Math.PI) * 1.0;
+            player.armR.rotation.x = Math.sin(playerState.animTime) * 1.0;
+        } else {
+            player.legL.rotation.x *= 0.8; player.legR.rotation.x *= 0.8;
+            if (!playerState.onGround) {
+                player.armL.rotation.x = THREE.MathUtils.lerp(player.armL.rotation.x, Math.PI, 0.1);
+                player.armR.rotation.x = THREE.MathUtils.lerp(player.armR.rotation.x, Math.PI, 0.1);
+            } else {
+                player.armL.rotation.x *= 0.8; player.armR.rotation.x *= 0.8;
+            }
+        }
+    }
+
+    function updateEnemies(dt) {
+        enemyGroup.children.forEach(enemy => {
+            const data = enemy.userData;
+            enemy.position.x += data.velocity.x * dt;
+            
+            if (enemy.position.x < data.patrolStart || enemy.position.x > data.patrolEnd) {
+                data.velocity.x *= -1;
+            }
+            
+            if (data.type !== 'slime') {
+                const targetRot = data.velocity.x > 0 ? Math.PI / 2 : -Math.PI / 2;
+                enemy.rotation.y += (targetRot - enemy.rotation.y) * 10 * dt;
+            }
+
+            const t = clock.getElapsedTime();
+            if (data.type === 'mushroom') {
+                enemy.rotation.z = Math.sin(t * 10) * 0.1;
+                enemy.footL.rotation.x = Math.sin(t * 15) * 0.6;
+                enemy.footR.rotation.x = Math.cos(t * 15) * 0.6;
+            } else if (data.type === 'slime') {
+                const s = 1 + Math.sin(t * 5) * 0.1;
+                enemy.scale.set(s, 1/s, s);
+            } else if (data.type === 'turtle') {
+                enemy.footL.rotation.x = Math.sin(t * 8) * 0.4;
+                enemy.footR.rotation.x = Math.cos(t * 8) * 0.4;
+            }
+        });
+    }
+
+    function checkEnemyCollisions() {
+        const pBox = new THREE.Box3().setFromObject(player);
+        pBox.expandByScalar(-0.3); 
+
+        enemyGroup.children.forEach(enemy => {
+            if (!enemy.visible) return;
+            const eBox = new THREE.Box3().setFromObject(enemy);
+            
+            if (pBox.intersectsBox(eBox)) {
+                const landedOnTop = playerState.velocity.y < 0 && player.position.y > enemy.position.y;
+                if (landedOnTop) {
+                    if (enemy.userData.isSpiky) {
+                        die();
+                    } else {
+                        enemy.visible = false; enemy.position.y = -999;
+                        playerState.velocity.y = 12; 
+                        addScore(100);
+                    }
+                } else {
+                    die();
+                }
+            }
+        });
+    }
+
+    function hitBlock(block) {
+        if (block.material.map === textures.question) {
+            block.material = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+            addScore(50);
+            const startY = block.userData.originalY;
+            let jumpT = 0;
+            const animInterval = setInterval(() => {
+                jumpT += 0.2;
+                block.position.y = startY + Math.sin(jumpT) * 0.5;
+                if (jumpT >= Math.PI) { block.position.y = startY; clearInterval(animInterval); }
+            }, 16);
+        }
+    }
+
+    function collectCoin(coin) {
+        coin.visible = false; coin.userData.active = false; addScore(10);
+    }
+
+    function activateCheckpoint(ckpt) {
+        if (gameState.checkpoint && gameState.checkpoint.id === ckpt.userData.id) return; 
+        
+        gameState.checkpoint = { x: ckpt.position.x, y: ckpt.position.y, id: ckpt.userData.id };
+        ckpt.children[1].material.color.setHex(0x00FF00); // Bandeira fica verde
+        ckpt.children[1].position.y += 1; 
+        
+        const msg = document.getElementById('checkpoint-msg');
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 2000);
+        addScore(100);
+    }
+
+    function activatePowerup(pu) {
+        pu.visible = false; pu.userData.active = false;
+        gameState.powerupActive = true;
+        gameState.powerupTimer = 10; 
+        document.getElementById('powerup-msg').style.display = 'block';
+        addScore(200);
+    }
+
+    function addScore(points) {
+        gameState.score += points; document.getElementById('score').innerText = gameState.score;
+    }
+
+    function die() {
+        if (playerState.isDead) return;
+        playerState.isDead = true;
+        gameState.lives--;
+        document.getElementById('lives').innerText = gameState.lives;
+        playerState.velocity.y = 15; 
+        
+        if (gameState.lives > 0) setTimeout(respawn, 1000);
+        else setTimeout(() => showGameOver("FIM DE JOGO"), 1000);
+    }
+
+    function respawn() {
+        playerState.isDead = false;
+        playerState.velocity.set(0, 0, 0);
+        
+        if (gameState.checkpoint) {
+             // Respawn exatamente no checkpoint
+             player.position.set(gameState.checkpoint.x, gameState.checkpoint.y + 2, 0);
+        } else {
+             // Se não tiver checkpoint, reinicia do começo da fase (generateLevel reiniciou posição)
+             // Temos que achar a posição inicial 'S' se generateLevel não foi chamado recentemente.
+             // Simplesmente rodamos generateLevel(gameState.currentLevel) para resetar a fase inteira (estilo Mario clássico)
+             // OU voltamos pro inicio. Para checkpoint funcionar, só reposicionamos o player.
+             
+             // Se não há checkpoint, volta pro inicio da fase
+             // Vamos resetar a fase para garantir que inimigos voltem? Normalmente em Mario sim, mas aqui simplificado:
+             // Apenas move o player.
+             const startPos = getStartPosition(gameState.currentLevel);
+             player.position.set(startPos.x, startPos.y, 0);
+        }
+        player.rotation.set(0, Math.PI/2, 0);
+        playerState.input.x = 0;
+    }
+    
+    function getStartPosition(levelIndex) {
+        const map = LEVELS[levelIndex];
+        for(let r=0; r<map.length; r++) {
+            for(let c=0; c<map[r].length; c++) {
+                if (map[r][c].match(/S/)) {
+                     const y = map.length - 1 - r;
+                     return { x: c * BLOCK_SIZE, y: (y + 2) * BLOCK_SIZE };
+                }
+            }
+        }
+        return {x: 0, y: 5};
+    }
+
+    function nextLevel() {
+        if (gameState.currentLevel < LEVELS.length - 1) {
+            const msg = document.getElementById('level-msg');
+            msg.style.display = 'block';
+            msg.innerText = "Fase " + (gameState.currentLevel + 2);
+            setTimeout(() => { msg.style.display = 'none'; }, 2000);
+            
+            generateLevel(gameState.currentLevel + 1);
+        } else {
+            winGame();
+        }
+    }
+
+    function winGame() {
+        if (gameState.won) return;
+        gameState.won = true; showGameOver("VOCÊ ZEROU O JOGO!");
+    }
+
+    function showGameOver(msg) {
+        gameState.isPlaying = false;
+        document.getElementById('msg-title').innerText = msg;
+        document.getElementById('msg-text').innerText = `Pontuação Final: ${gameState.score}`;
+        document.getElementById('message-box').style.display = 'block';
+    }
+
+    window.resetGame = function() {
+        gameState.lives = 5; gameState.score = 0; gameState.won = false; gameState.isPlaying = true;
+        gameState.checkpoint = null;
+        gameState.powerupActive = false;
+        playerState.isDead = false;
+        document.getElementById('lives').innerText = 5; document.getElementById('score').innerText = 0;
+        document.getElementById('powerup-msg').style.display = 'none';
+        document.getElementById('message-box').style.display = 'none';
+        
+        generateLevel(0); 
+    };
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth / PIXEL_SCALE, window.innerHeight / PIXEL_SCALE, false);
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const dt = Math.min(clock.getDelta(), 0.05);
+
+        bgGroup.children.forEach(obj => {
+            if (obj.userData.speed) {
+                obj.position.x += obj.userData.speed * dt;
+                if (obj.position.x > 200) obj.position.x = -50;
+            }
+        });
+
+        levelGroup.children.forEach(obj => {
+            if (obj.userData.isPowerup && obj.userData.active) {
+                obj.rotation.y += 2 * dt;
+                obj.position.y = obj.userData.startY + Math.sin(clock.getElapsedTime()*3) * 0.2;
+            }
+        });
+
+        if (gameState.isPlaying && player) {
+            updatePlayer(dt);
+            updateEnemies(dt);
+
+            cameraTargetX = player.position.x;
+            if (cameraTargetX < 0) cameraTargetX = 0;
+            camera.position.x += (cameraTargetX - camera.position.x) * 5 * dt;
+            camera.position.y += (Math.max(6, player.position.y + 1) - camera.position.y) * 3 * dt;
+            
+            levelGroup.children.forEach(c => { if (c.userData.isCoin && c.visible) c.rotation.y += 3 * dt; });
+        }
+        
+        if (playerState.isDead && player) {
+            player.position.y += playerState.velocity.y * dt;
+            playerState.velocity.y -= PHYSICS.gravity * dt;
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    init();
+</script>
+</body>
+</html>

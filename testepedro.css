@@ -1,0 +1,171 @@
+/* Definição de Variáveis de Cor */
+:root {
+    --gm-blue: #050a30;      /* Azul Escuro Principal */
+    --gm-green: #39ff14;     /* Verde Neon */
+    --gm-dark-green: #2ecc71;
+    --gm-gray-bg: #f4f4f4;
+}
+
+body {
+    background-color: var(--gm-blue);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- CABEÇALHO --- */
+.header-top {
+    background-color: #050a30;
+}
+
+/* Customização da cor de fundo da Navbar */
+.bg-dark-custom {
+    background-color: #020413;
+}
+
+/* Links do menu e ícones */
+.nav-link, .icon-link {
+    color: white !important;
+    transition: color 0.3s;
+}
+
+.nav-link:hover, .icon-link:hover {
+    color: var(--gm-green) !important;
+}
+
+/* Botão de busca dentro do input */
+.btn-search {
+    background: transparent;
+    border: none;
+    height: 100%;
+    padding-right: 15px;
+}
+.btn-search:hover i {
+    color: black !important;
+}
+
+/* Badge do carrinho */
+.badge.bg-neon {
+    background-color: var(--gm-green) !important;
+    color: #000;
+}
+
+/* --- BANNER --- */
+.banner-advantages {
+    background: linear-gradient(90deg, #0a1f68 0%, #000000 100%);
+}
+.text-neon {
+    color: var(--gm-green) !important;
+}
+.text-light-gray {
+    color: #ccc;
+    font-size: 0.75rem;
+}
+
+/* --- SIDEBAR & GERAL --- */
+.text-blue-dark {
+    color: var(--gm-blue);
+}
+.hover-blue:hover {
+    color: var(--gm-blue) !important;
+}
+
+/* Botão Newsletter */
+.btn-dark-blue {
+    background-color: var(--gm-blue);
+    color: white;
+    transition: all 0.3s;
+}
+.btn-dark-blue:hover {
+    background-color: var(--gm-green);
+    color: var(--gm-blue);
+}
+
+/* --- PRODUTOS --- */
+.product-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+    border: 1px solid #eee;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1) !important;
+}
+
+/* Efeito de zoom na imagem do produto */
+.product-img-container {
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.product-img-container img {
+    transition: transform 0.3s;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+.product-card:hover .product-img-container img {
+    transform: scale(1.1);
+}
+
+/* Preço e Botão */
+.price-tag {
+    color: var(--gm-green);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+}
+.discount-tag-card {
+    background-color: #0a3d2e;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 0;
+    width: 80px;
+    margin: 0 auto;
+    border-radius: 4px 4px 0 0;
+}
+
+/* Botão Comprar no Card */
+.btn-buy {
+    background-color: var(--gm-blue);
+    color: white;
+    border-radius: 0 0 4px 4px;
+}
+.product-card:hover .btn-buy {
+    background-color: var(--gm-green);
+    color: var(--gm-blue);
+}
+
+/* --- FOOTER --- */
+.bg-blue-dark {
+    background-color: #050a30;
+}
+.border-top-neon {
+    border-top: 4px solid var(--gm-green);
+}
+.hover-white:hover {
+    color: white !important;
+}
+.bg-neon {
+    background-color: var(--gm-green);
+}
+.text-dark-blue {
+    color: var(--gm-blue);
+}
+.hover-scale {
+    transition: transform 0.2s;
+}
+.hover-scale:hover {
+    transform: scale(1.2);
+}
+
+/* Scrollbar Personalizada */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #0a0e27;
+}
+::-webkit-scrollbar-thumb {
+    background: #39ff14;
+    border-radius: 5px;
+}

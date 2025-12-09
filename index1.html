@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Mania - Home</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Ícones Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="1.css">
+</head>
+<body>
+<header>
+   <div class="top-bar d-flex justify-content-center align-items-center">
+        <span class="fw-bold text-uppercase">
+            Aceitamos Pix <i class="bi bi-x-diamond-fill ms-1"></i>
+        </span>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-custom-dark pt-3 pb-2">
+        <div class="container">
+            
+            <a class="navbar-brand me-4" href="#">
+                <img src="/LOGO.png" alt="Logo Game Mania" class="logo-img">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                
+                <form class="d-flex mx-auto search-container my-3 my-lg-0">
+                    <input class="form-control search-input" type="search" placeholder="Precisa de alguma coisa?" aria-label="Search">
+                    <button class="btn search-btn" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+
+                <div class="header-icons d-flex align-items-center justify-content-center gap-4 mb-3 mb-lg-0">
+                    <a href="#" title="Atendimento"><i class="bi bi-chat-text"></i></a>
+                    <a href="#" title="Rastreio"><i class="bi bi-truck"></i></a>
+                    <a href="#" title="Minha Conta"><i class="bi bi-person-fill"></i></a>
+                    <a href="#" title="Carrinho"><i class="bi bi-cart-fill"></i></a>
+                </div>
+
+                <ul class="navbar-nav d-lg-none border-top border-secondary mt-3 pt-3 text-center">
+                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">JOGOS</a></li>
+                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">CONSOLES</a></li>
+                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">PC</a></li>
+                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">DIVERSOS</a></li>
+                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">NOTEBOOK</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="category-bar d-none d-lg-block bg-custom-dark border-top border-secondary">
+        <div class="container d-flex justify-content-center">
+            <a href="#" class="cat-link">JOGOS</a>
+            <a href="#" class="cat-link">CONSOLES</a>
+            <a href="#" class="cat-link">PC</a>
+            <a href="#" class="cat-link">DIVERSOS</a>
+            <a href="#" class="cat-link">NOTEBOOK</a>
+        </div>
+    </div>
+
+    <section class="benefits-bar">
+
+        
+<section class="benefits-bar">
+    <div class="container">
+        <div class="row py-2 align-items-center">
+            
+            <div class="col-12 col-md-4">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-start benefit-item">
+                    <i class="bi bi-x-diamond-fill icon-neon me-2"></i>
+                    <div class="benefit-text">
+                        <span class="d-block fw-bold text-white text-uppercase benefit-title">10% de Desconto</span>
+                        <small class="text-muted-light">pix / boleto / depósito</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="d-flex align-items-center justify-content-center benefit-item border-desktop">
+                    <i class="bi bi-credit-card-2-front-fill icon-neon me-2"></i>
+                    <div class="benefit-text">
+                        <span class="d-block fw-bold text-white text-uppercase benefit-title">9x sem Juros</span>
+                        <small class="text-muted-light">cartão de crédito / paypal</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-end benefit-item">
+                    <i class="bi bi-truck-front-fill icon-neon me-2"></i>
+                    <div class="benefit-text">
+                        <span class="d-block fw-bold text-white text-uppercase benefit-title">Frete Grátis</span>
+                        <small class="text-muted-light">sul e sudeste*</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </header>
+    <!-- MENU -->
+   
+
+    <!-- 1. CARROSSEL PRINCIPAL (BANNERS) -->
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        </div>
+        <div class="carousel-inner">
+            <!-- Slide 1: Banner Azul/Roxo (Estilo Fortnite/Gamer) -->
+            <div class="carousel-item active">
+                <div style="height: 400px; background: linear-gradient(90deg, #0b0e1f 0%, #4b0082 100%); display: flex; align-items: center; justify-content: center; position: relative;">
+                     <!-- Imagem placeholder simulando o banner da imagem -->
+                     <img src="https://placehold.co/1200x400/1a1d2e/FFF?text=MEGA+SALE+-+FAZE+CLAN+X+FORTNITE" class="d-block w-100 h-100 object-fit-cover" alt="Banner Gamer">
+                     <div class="carousel-caption d-none d-md-block text-start" style="bottom: 20%; left: 10%;">
+                        <h2 class="display-4 fw-bold text-green">FAZE MEGA</h2>
+                        <p class="lead">Descontos épicos em itens selecionados.</p>
+                        <button class="btn btn-outline-light btn-lg rounded-0">CONFIRA AGORA</button>
+                     </div>
+                </div>
+            </div>
+            <!-- Slide 2: Banner Black Friday -->
+            <div class="carousel-item">
+                <div style="height: 400px; background-color: #000; display: flex; align-items: center; justify-content: center;">
+                    <img src="https://placehold.co/1200x400/000000/5ed12b?text=SUPER+SALE+BLACK+FRIDAY" class="d-block w-100 h-100 object-fit-cover" alt="Banner Black Friday">
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Próximo</span>
+        </button>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="container my-5">
+        
+        <!-- 2. CARROSSEL DE MARCAS -->
+        <div class="text-center mb-4">
+            <h3 class="fw-bold title-underline-center text-uppercase text-muted small spacing-wide">Navegue pelas Marcas</h3>
+        </div>
+
+        <div id="brandCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Slide 1 de Marcas -->
+                <div class="carousel-item active">
+                    <div class="d-flex justify-content-around align-items-center py-4">
+                        <img src="https://placehold.co/100x50/EEE/333?text=PlayStation" class="img-fluid brand-logo" alt="PlayStation">
+                        <img src="https://placehold.co/100x50/EEE/333?text=2K+Games" class="img-fluid brand-logo" alt="2K">
+                        <img src="https://placehold.co/100x50/EEE/333?text=Microsoft" class="img-fluid brand-logo" alt="Microsoft">
+                        <img src="https://placehold.co/100x50/EEE/333?text=Rockstar" class="img-fluid brand-logo" alt="Rockstar">
+                    </div>
+                </div>
+                <!-- Slide 2 de Marcas -->
+                <div class="carousel-item">
+                    <div class="d-flex justify-content-around align-items-center py-4">
+                        <img src="https://placehold.co/100x50/EEE/333?text=Nintendo" class="img-fluid brand-logo" alt="Nintendo">
+                        <img src="https://placehold.co/100x50/EEE/333?text=Sega" class="img-fluid brand-logo" alt="Sega">
+                        <img src="https://placehold.co/100x50/EEE/333?text=Ubisoft" class="img-fluid brand-logo" alt="Ubisoft">
+                        <img src="https://placehold.co/100x50/EEE/333?text=EA+Sports" class="img-fluid brand-logo" alt="EA">
+                    </div>
+                </div>
+            </div>
+            <!-- Controles Marcas -->
+            <button class="carousel-control-prev custom-control-dark" type="button" data-bs-target="#brandCarousel" data-bs-slide="prev">
+                <i class="bi bi-chevron-left text-dark fs-3"></i>
+            </button>
+            <button class="carousel-control-next custom-control-dark" type="button" data-bs-target="#brandCarousel" data-bs-slide="next">
+                <i class="bi bi-chevron-right text-dark fs-3"></i>
+            </button>
+        </div>
+
+        <!-- CATEGORIAS DESTAQUE (Toys to Life, Funko, Volantes) -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card bg-dark text-white border-0 hover-scale">
+                    <img src="https://placehold.co/400x300/111/5ed12b?text=Toys+to+Life" class="card-img opacity-50" alt="Toys">
+                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4">
+                        <h4 class="card-title fw-bold text-green">TOYS TO LIFE</h4>
+                        <p class="card-text small">Colecione seus heróis favoritos.</p>
+                        <button class="btn btn-sm btn-success w-50">Conferir</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-white border-0 hover-scale">
+                    <img src="https://placehold.co/400x300/111/ffc107?text=Funko+Pop" class="card-img opacity-50" alt="Funko">
+                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4">
+                        <h4 class="card-title fw-bold text-warning">FUNKO POP</h4>
+                        <p class="card-text small">O seu personagem preferido está aqui.</p>
+                        <button class="btn btn-sm btn-success w-50">Conferir</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-white border-0 hover-scale">
+                    <img src="https://placehold.co/400x300/111/0dcaf0?text=Joysticks" class="card-img opacity-50" alt="Volantes">
+                    <div class="card-img-overlay d-flex flex-column justify-content-end p-4">
+                        <h4 class="card-title fw-bold text-info">VOLANTES E JOYSTICKS</h4>
+                        <p class="card-text small">Realismo e sensação de pilotar.</p>
+                        <button class="btn btn-sm btn-success w-50">Conferir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIS VENDIDOS -->
+        <div class="text-center mb-4">
+            <h3 class="fw-bold title-underline-center text-uppercase text-muted small spacing-wide">Mais Vendidos</h3>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <!-- Produto 1 -->
+            <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 border-0 text-center product-card p-3">
+                    <div class="position-relative">
+                        <span class="badge bg-primary position-absolute top-0 start-0">PS4</span>
+                        <img src="https://placehold.co/200x250/EEE/333?text=Capa+Shadow" class="card-img-top p-3" alt="Jogo">
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-uppercase small">SHADOW OF THE COLOSSUS (CARTELA) - PS4</h6>
+                        <p class="text-muted text-decoration-line-through small mb-0">R$ 99,00</p>
+                        <p class="text-green fw-bold">R$ 79,00</p>
+                        <p class="small text-muted">9x de R$ 8,77 sem juros</p>
+                        <button class="btn btn-dark btn-sm w-100 btn-comprar">COMPRAR</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Produto 2 -->
+            <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 border-0 text-center product-card p-3">
+                    <div class="position-relative">
+                        <span class="badge bg-primary position-absolute top-0 start-0">PS4</span>
+                        <img src="https://placehold.co/200x250/EEE/333?text=Capa+Shadow" class="card-img-top p-3" alt="Jogo">
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-uppercase small">SHADOW OF THE COLOSSUS (CARTELA) - PS4</h6>
+                        <p class="text-muted text-decoration-line-through small mb-0">R$ 99,00</p>
+                        <p class="text-green fw-bold">R$ 79,00</p>
+                        <p class="small text-muted">9x de R$ 8,77 sem juros</p>
+                        <button class="btn btn-dark btn-sm w-100 btn-comprar">COMPRAR</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Produto 3 -->
+            <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 border-0 text-center product-card p-3">
+                    <div class="position-relative">
+                        <span class="badge bg-primary position-absolute top-0 start-0">PS4</span>
+                        <img src="https://placehold.co/200x250/EEE/333?text=Capa+Shadow" class="card-img-top p-3" alt="Jogo">
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-uppercase small">SHADOW OF THE COLOSSUS (CARTELA) - PS4</h6>
+                        <p class="text-muted text-decoration-line-through small mb-0">R$ 99,00</p>
+                        <p class="text-green fw-bold">R$ 79,00</p>
+                        <p class="small text-muted">9x de R$ 8,77 sem juros</p>
+                        <button class="btn btn-dark btn-sm w-100 btn-comprar">COMPRAR</button>
+                    </div>
+                </div>
+            </div>
+             <!-- Produto 4 -->
+             <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 border-0 text-center product-card p-3">
+                    <div class="position-relative">
+                        <span class="badge bg-primary position-absolute top-0 start-0">PS4</span>
+                        <img src="https://placehold.co/200x250/EEE/333?text=Capa+Shadow" class="card-img-top p-3" alt="Jogo">
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-uppercase small">SHADOW OF THE COLOSSUS (CARTELA) - PS4</h6>
+                        <p class="text-muted text-decoration-line-through small mb-0">R$ 99,00</p>
+                        <p class="text-green fw-bold">R$ 79,00</p>
+                        <p class="small text-muted">9x de R$ 8,77 sem juros</p>
+                        <button class="btn btn-dark btn-sm w-100 btn-comprar">COMPRAR</button>
+                    </div>
+                </div>
+            </div>
+             <!-- Produto 5 -->
+             <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 border-0 text-center product-card p-3">
+                    <div class="position-relative">
+                        <span class="badge bg-primary position-absolute top-0 start-0">PS4</span>
+                        <img src="https://placehold.co/200x250/EEE/333?text=Capa+Shadow" class="card-img-top p-3" alt="Jogo">
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-uppercase small">SHADOW OF THE COLOSSUS (CARTELA) - PS4</h6>
+                        <p class="text-muted text-decoration-line-through small mb-0">R$ 99,00</p>
+                        <p class="text-green fw-bold">R$ 79,00</p>
+                        <p class="small text-muted">9x de R$ 8,77 sem juros</p>
+                        <button class="btn btn-dark btn-sm w-100 btn-comprar">COMPRAR</button>
+                    </div>
+                </div>
+            </div>
+             <!-- Produto 6 -->
+             <div class="col-sm-6 col-lg-4">
+                <div class="card h-100 border-0 text-center product-card p-3">
+                    <div class="position-relative">
+                        <span class="badge bg-primary position-absolute top-0 start-0">PS4</span>
+                        <img src="https://placehold.co/200x250/EEE/333?text=Capa+Shadow" class="card-img-top p-3" alt="Jogo">
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-uppercase small">SHADOW OF THE COLOSSUS (CARTELA) - PS4</h6>
+                        <p class="text-muted text-decoration-line-through small mb-0">R$ 99,00</p>
+                        <p class="text-green fw-bold">R$ 79,00</p>
+                        <p class="small text-muted">9x de R$ 8,77 sem juros</p>
+                        <button class="btn btn-dark btn-sm w-100 btn-comprar">COMPRAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. AVALIAÇÕES (CARROSSEL) -->
+        <div class="text-center mb-4 border-top pt-4">
+            <h3 class="fw-bold title-underline-center text-uppercase text-muted small spacing-wide">Avaliações</h3>
+        </div>
+
+        <div id="testimonialCarousel" class="carousel slide text-center mb-5" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Depoimento 1 -->
+                <div class="carousel-item active">
+                    <div class="d-flex flex-column align-items-center">
+                        <img src="https://placehold.co/80x80/EEE/333?text=Viviane" class="rounded-circle mb-3 border border-success border-3" alt="Viviane">
+                        <h5 class="fw-bold">Viviane</h5>
+                        <p class="small text-muted">Rio de Janeiro - RJ</p>
+                        <p class="w-75 text-muted fst-italic">"Fiquei com medo de fazer a encomenda e não receber, pois não conhecia a loja. Mas acabou chegando antes."</p>
+                    </div>
+                </div>
+                <!-- Depoimento 2 -->
+                <div class="carousel-item">
+                    <div class="d-flex flex-column align-items-center">
+                        <img src="https://placehold.co/80x80/EEE/333?text=Matheus" class="rounded-circle mb-3 border border-success border-3" alt="Matheus">
+                        <h5 class="fw-bold">Matheus</h5>
+                        <p class="small text-muted">Itajaí - SC</p>
+                        <p class="w-75 text-muted fst-italic">"Serviço ótimo e site muito organizado! A encomenda chegou antes do prazo e bem embalada. O produto de excelente qualidade!"</p>
+                    </div>
+                </div>
+                 <!-- Depoimento 3 -->
+                 <div class="carousel-item">
+                    <div class="d-flex flex-column align-items-center">
+                        <img src="https://placehold.co/80x80/EEE/333?text=Rafi" class="rounded-circle mb-3 border border-success border-3" alt="Rafi">
+                        <h5 class="fw-bold">Rafi</h5>
+                        <p class="small text-muted">Várzea Paulista - SP</p>
+                        <p class="w-75 text-muted fst-italic">"Loja diferenciada, com produtos diferenciados. É ainda por cima, com o pagamento diferenciado e com desconto. Sensacional!"</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev custom-control-dark" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <i class="bi bi-chevron-left text-dark fs-3"></i>
+            </button>
+            <button class="carousel-control-next custom-control-dark" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <i class="bi bi-chevron-right text-dark fs-3"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-blue-dark text-secondary small border-top-neon">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-6 col-md-3">
+                    <h6 class="text-white fw-bold text-uppercase mb-3">Institucional</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Quem Somos</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Termos e Condições</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h6 class="text-white fw-bold text-uppercase mb-3">Dúvidas</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Como comprar</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Prazos e Entregas</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Formas de Pagamento</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h6 class="text-white fw-bold text-uppercase mb-3">Cliente</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Minha conta</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Meus pedidos</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-3">
+                    <h6 class="text-white fw-bold text-uppercase mb-3">Ajuda</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Fale Conosco</a></li>
+                        <li><a href="#" class="text-decoration-none text-secondary hover-white">Central de Ajuda</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-neon py-3">
+            <div class="container d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 text-dark-blue">
+                <span class="fw-bold">SIGA-NOS</span>
+                <div class="fs-4 d-flex gap-3">
+                    <i class="fab fa-instagram cursor-pointer hover-scale"></i>
+                    <i class="fab fa-twitter cursor-pointer hover-scale"></i>
+                    <i class="fab fa-youtube cursor-pointer hover-scale"></i>
+                    <i class="fab fa-facebook cursor-pointer hover-scale"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-black py-4 text-center">
+            <div class="h4 fw-bold text-white mb-2">
+                GAME <span class="text-neon"><i class="fas fa-gamepad"></i></span> MANIA
+            </div>
+            <p class="mb-0 text-white">© 2023 Game Mania. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts Bootstrap e Custom -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="testepedro.js"></script>
+</body>
+</html>
