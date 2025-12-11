@@ -5,304 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Mania - Fale Conosco</title>
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Ícones Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <!-- CSS Personalizado -->
-    <link rel="stylesheet" href="3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- CABEÇALHO -->
-    <header>
-   <div class="top-bar d-flex justify-content-center align-items-center">
-        <span class="fw-bold text-uppercase">
-            Aceitamos Pix <i class="bi bi-x-diamond-fill ms-1"></i>
-        </span>
-    </div>
+    <div id="cart-sidebar-container"></div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-custom-dark pt-3 pb-2">
-        <div class="container">
-            
-            <a class="navbar-brand me-4" href="#">
-                <img src="/LOGO.png" alt="Logo Game Mania" class="logo-img">
-            </a>
+    <header id="header-target"></header>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="menuPrincipal">
-                
-                <form class="d-flex mx-auto search-container my-3 my-lg-0">
-                    <input class="form-control search-input" type="search" placeholder="Precisa de alguma coisa?" aria-label="Search">
-                    <button class="btn search-btn" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
-
-                <div class="header-icons d-flex align-items-center justify-content-center gap-4 mb-3 mb-lg-0">
-                    <a href="#" title="Atendimento"><i class="bi bi-chat-text"></i></a>
-                    <a href="#" title="Rastreio"><i class="bi bi-truck"></i></a>
-                    <a href="#" title="Minha Conta"><i class="bi bi-person-fill"></i></a>
-                    <a href="#" title="Carrinho"><i class="bi bi-cart-fill"></i></a>
-                </div>
-
-                <ul class="navbar-nav d-lg-none border-top border-secondary mt-3 pt-3 text-center">
-                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">JOGOS</a></li>
-                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">CONSOLES</a></li>
-                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">PC</a></li>
-                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">DIVERSOS</a></li>
-                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">NOTEBOOK</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="category-bar d-none d-lg-block bg-custom-dark border-top border-secondary">
-        <div class="container d-flex justify-content-center">
-            <a href="#" class="cat-link">JOGOS</a>
-            <a href="#" class="cat-link">CONSOLES</a>
-            <a href="#" class="cat-link">PC</a>
-            <a href="#" class="cat-link">DIVERSOS</a>
-            <a href="#" class="cat-link">NOTEBOOK</a>
-        </div>
-    </div>
-
-    <section class="benefits-bar">
-
+    <main class="mb-5">
         
-<section class="benefits-bar">
-    <div class="container">
-        <div class="row py-2 align-items-center">
+        <div class="container mt-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none text-muted">Home</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">Fale Conosco</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="container main-content-white mb-5">
             
-            <div class="col-12 col-md-4">
-                <div class="d-flex align-items-center justify-content-center justify-content-md-start benefit-item">
-                    <i class="bi bi-x-diamond-fill icon-neon me-2"></i>
-                    <div class="benefit-text">
-                        <span class="d-block fw-bold text-white text-uppercase benefit-title">10% de Desconto</span>
-                        <small class="text-muted-light">pix / boleto / depósito</small>
-                    </div>
-                </div>
-            </div>
+            <h2 class="section-title mb-5">Fale Conosco</h2>
 
-            <div class="col-12 col-md-4">
-                <div class="d-flex align-items-center justify-content-center benefit-item border-desktop">
-                    <i class="bi bi-credit-card-2-front-fill icon-neon me-2"></i>
-                    <div class="benefit-text">
-                        <span class="d-block fw-bold text-white text-uppercase benefit-title">9x sem Juros</span>
-                        <small class="text-muted-light">cartão de crédito / paypal</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-4">
-                <div class="d-flex align-items-center justify-content-center justify-content-md-end benefit-item">
-                    <i class="bi bi-truck-front-fill icon-neon me-2"></i>
-                    <div class="benefit-text">
-                        <span class="d-block fw-bold text-white text-uppercase benefit-title">Frete Grátis</span>
-                        <small class="text-muted-light">sul e sudeste*</small>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    </header>
-
-    <!-- MENU DE NAVEGAÇÃO -->
-    
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <div class="container my-4">
-        
-        <!-- Breadcrumb (Caminho) -->
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Página Inicial</a></li>
-                <li class="breadcrumb-item active text-green fw-bold" aria-current="page">Fale Conosco</li>
-            </ol>
-        </nav>
-
-        <h2 class="section-title mb-5">Fale Conosco</h2>
-
-        <div class="row">
-            <!-- Coluna da Esquerda (FAQ) -->
-            <div class="col-lg-7">
-                <h3 class="fw-bold mb-4 title-underline">Dúvidas Frequentes</h3>
-                
-                <!-- Acordeão FAQ -->
-                <div class="accordion custom-accordion" id="faqAccordion">
-                    
-                    <!-- Pergunta 1 -->
-                    <div class="accordion-item mb-3 border-0">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed bg-dark-blue text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                <i class="bi bi-question-lg me-2 text-green fs-4"></i> Tem desconto à vista?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body bg-light border rounded mt-1">
-                                Sim! Oferecemos 10% de desconto para pagamentos via PIX ou Boleto Bancário. O desconto é aplicado automaticamente no carrinho.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pergunta 2 -->
-                    <div class="accordion-item mb-3 border-0">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed bg-dark-blue text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <i class="bi bi-question-lg me-2 text-green fs-4"></i> Posso parcelar sem juros?
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body bg-light border rounded mt-1">
-                                Com certeza. Você pode parcelar suas compras em até 9x sem juros no cartão de crédito.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pergunta 3 -->
-                    <div class="accordion-item mb-3 border-0">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed bg-dark-blue text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                <i class="bi bi-question-lg me-2 text-green fs-4"></i> Quais formas de pagamento aceitam?
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body bg-light border rounded mt-1">
-                                Aceitamos Cartões de Crédito (Visa, Mastercard, Elo), Boleto Bancário e PIX.
-                            </div>
-                        </div>
-                    </div>
-
-                     <!-- Pergunta 4 -->
-                     <div class="accordion-item mb-3 border-0">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed bg-dark-blue text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                <i class="bi bi-question-lg me-2 text-green fs-4"></i> A loja oferece suporte técnico?
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body bg-light border rounded mt-1">
-                                Sim, temos uma equipe especializada para ajudar na instalação ou configuração de produtos comprados conosco.
-                            </div>
-                        </div>
-                    </div>
-
-                     <!-- Pergunta 5 -->
-                     <div class="accordion-item mb-3 border-0">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed bg-dark-blue text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                <i class="bi bi-question-lg me-2 text-green fs-4"></i> Quais são os horários de atendimento?
-                            </button>
-                        </h2>
-                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body bg-light border rounded mt-1">
-                                Nosso atendimento funciona de Segunda a Sexta, das 08h às 18h, e aos Sábados das 09h às 13h.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pergunta 6 -->
-                     <div class="accordion-item mb-3 border-0">
-                        <h2 class="accordion-header" id="headingSix">
-                            <button class="accordion-button collapsed bg-dark-blue text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                <i class="bi bi-question-lg me-2 text-green fs-4"></i> Existe atendimento pelo WhatsApp?
-                            </button>
-                        </h2>
-                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body bg-light border rounded mt-1">
-                                Sim! Você pode clicar nos números abaixo para falar diretamente conosco pelo WhatsApp.
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Coluna da Direita (Imagem Robô) -->
-            <div class="col-lg-5 text-center d-flex align-items-center justify-content-center">
-                <!-- Placeholder para a imagem do Robô -->
-                <img src="https://placehold.co/400x400/FFF/5ed12b?text=Robô+Atendente" class="img-fluid" alt="Robô de Atendimento">
-            </div>
-        </div>
-
-        <div class="row mt-5">
-            <!-- Redes Sociais -->
-            <div class="col-md-6 mb-4">
-                <h3 class="fw-bold mb-3 title-underline">Redes Sociais</h3>
-                <ul class="list-unstyled fw-bold">
-                    <li class="mb-2 d-flex align-items-center">
-                        <i class="bi bi-instagram fs-4 text-green me-3"></i> @gamemania.oficial
-                    </li>
-                    <li class="mb-2 d-flex align-items-center">
-                        <i class="bi bi-youtube fs-4 text-green me-3"></i> youtube.com/@GameManiaTV
-                    </li>
-                    <li class="mb-2 d-flex align-items-center">
-                        <i class="bi bi-facebook fs-4 text-green me-3"></i> facebook.com/gamemaniabr
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Contato Direto (WhatsApp) -->
-            <div class="col-md-6 mb-4">
-                <h3 class="fw-bold mb-3 title-underline">Entre em contato diretamente com o nosso suporte!</h3>
-                <ul class="list-unstyled fw-bold">
-                    <li class="mb-2 d-flex align-items-center">
-                        <i class="bi bi-whatsapp fs-4 text-green me-3"></i> +55 37 96669-6669
-                    </li>
-                    <li class="mb-2 d-flex align-items-center">
-                        <i class="bi bi-telephone-fill fs-4 text-green me-3"></i> +55 37 96669-6669
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- RODAPÉ -->
-    <footer class="bg-dark-blue text-white mt-5 py-5 border-top border-success border-3">
-        <div class="container">
             <div class="row">
-                <div class="col-md-3 mb-3">
-                    <h5 class="fw-bold small text-uppercase text-white">Institucional</h5>
-                    <ul class="list-unstyled small">
-                        <li><a href="#" class="text-decoration-none text-white hover-green">Quem somos</a></li>
-                        <li><a href="#" class="text-decoration-none text-white hover-green">Termos e Condições</a></li>
-                        <li><a href="#" class="text-decoration-none text-white hover-green">Política de Privacidade</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <h5 class="fw-bold small text-uppercase text-white">Dúvidas</h5>
-                    <ul class="list-unstyled small">
-                        <li><a href="#" class="text-decoration-none text-white hover-green">Entrega</a></li>
-                        <li><a href="#" class="text-decoration-none text-white hover-green">Trocas e devoluções</a></li>
-                        <li><a href="#" class="text-decoration-none text-white hover-green">Formas de Pagamento</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <h5 class="fw-bold small text-uppercase text-white">Ajuda</h5>
-                    <ul class="list-unstyled small">
-                        <li><a href="#" class="text-decoration-none text-white hover-green">Fale Conosco</a></li>
-                        <li><a href="#" class="text-decoration-none text-white hover-green">Perguntas Frequentes</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 text-center">
-                    <h2 class="logo-text">GAME <span class="text-green">MANIA</span></h2>
-                    <div class="mt-3 text-white">
-                        <i class="bi bi-instagram fs-4 me-2"></i>
-                        <i class="bi bi-twitter fs-4 me-2"></i>
-                        <i class="bi bi-youtube fs-4"></i>
+                <div class="col-12 col-lg-7 mb-5 mb-lg-0">
+                    <h3 class="fw-bold mb-4 title-underline">Dúvidas Frequentes</h3>
+                    
+                    <div class="accordion custom-accordion" id="faqAccordion">
+                        
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                    <i class="bi bi-percent me-2"></i> Tem desconto à vista?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Sim! Oferecemos <strong>10% de desconto</strong> para pagamentos via PIX ou Boleto Bancário. O desconto é aplicado automaticamente no carrinho na etapa de pagamento.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                    <i class="bi bi-credit-card-2-front me-2"></i> Posso parcelar sem juros?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Com certeza. Você pode parcelar suas compras em até <strong>9x sem juros</strong> no cartão de crédito, ou até 12x com pequenos acréscimos dependendo da bandeira.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                    <i class="bi bi-wallet2 me-2"></i> Quais formas de pagamento aceitam?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Aceitamos Cartões de Crédito (Visa, Mastercard, Elo, Amex), Boleto Bancário (aprovação em até 2 dias úteis) e PIX (aprovação imediata).
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                                    <i class="bi bi-tools me-2"></i> A loja oferece suporte técnico?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Sim, temos uma equipe especializada para ajudar na instalação ou configuração de produtos comprados conosco. Basta entrar em contato pelo WhatsApp.
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                                    <i class="bi bi-clock-history me-2"></i> Quais são os horários de atendimento?
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Nosso atendimento funciona de Segunda a Sexta, das 08h às 18h, e aos Sábados das 09h às 13h.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item mb-3">
+                            <h2 class="accordion-header" id="headingSix">
+                                <button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix">
+                                    <i class="bi bi-whatsapp me-2"></i> Existe atendimento pelo WhatsApp?
+                                </button>
+                            </h2>
+                            <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Sim! Você pode clicar nos números listados ao lado ou no rodapé para falar diretamente conosco pelo WhatsApp.
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </div>
-        </div>
-    </footer>
 
-    <!-- Bootstrap JS (Essencial para o Accordion funcionar) -->
+                <div class="col-12 col-lg-5">
+                    
+                    <div class="text-center mb-5 d-none d-lg-block">
+                        <img src="https://placehold.co/400x300/f8f9fa/050a30?text=Atendimento+Game+Mania" class="img-fluid rounded shadow-sm border" alt="Atendimento">
+                    </div>
+
+                    <div class="bg-light p-4 rounded border">
+                        <div class="mb-4">
+                            <h4 class="fw-bold mb-3" style="color: var(--dark-blue);">Redes Sociais</h4>
+                            <ul class="list-unstyled fw-bold text-secondary">
+                                <li class="mb-2 contact-item d-flex align-items-center cursor-pointer">
+                                    <i class="bi bi-instagram fs-4 contact-icon me-3"></i> @gamemania.oficial
+                                </li>
+                                <li class="mb-2 contact-item d-flex align-items-center cursor-pointer">
+                                    <i class="bi bi-youtube fs-4 contact-icon me-3"></i> youtube.com/@GameManiaTV
+                                </li>
+                                <li class="mb-2 contact-item d-flex align-items-center cursor-pointer">
+                                    <i class="bi bi-facebook fs-4 contact-icon me-3"></i> facebook.com/gamemaniabr
+                                </li>
+                            </ul>
+                        </div>
+
+                        <hr>
+
+                        <div class="mt-4">
+                            <h4 class="fw-bold mb-3" style="color: var(--dark-blue);">Suporte Direto</h4>
+                            <p class="small text-muted mb-3">Clique para chamar no WhatsApp</p>
+                            <ul class="list-unstyled fw-bold text-secondary">
+                                <li class="mb-2 contact-item d-flex align-items-center cursor-pointer">
+                                    <i class="bi bi-whatsapp fs-4 contact-icon me-3"></i> (37) 96669-6669
+                                </li>
+                                <li class="mb-2 contact-item d-flex align-items-center cursor-pointer">
+                                    <i class="bi bi-telephone-fill fs-4 contact-icon me-3"></i> (37) 3222-0000
+                                </li>
+                                <li class="mb-2 contact-item d-flex align-items-center cursor-pointer">
+                                    <i class="bi bi-envelope-at-fill fs-4 contact-icon me-3"></i> sac@gamemania.com
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div> 
+    </main>
+
+    <footer id="footer-target"></footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="3.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
